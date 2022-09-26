@@ -120,11 +120,7 @@ export default {
         this.loading = true
         await this.$store.dispatch('user/LoginAction', this.loginForm)
         console.log(this.$store.state.user.token)
-        if (this.$store.state.user.token) {
-          this.$router.push('/')
-        } else {
-          this.$message.error('验证码错误')
-        }
+        this.$router.push('/')
       } finally {
         this.loading = false
       }
