@@ -1,0 +1,72 @@
+{
+  "id": "3670496",
+  "name": "立可得",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "107370",
+      "name": "灯泡",
+      "font_class": "bulb",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "869170",
+      "name": "主页",
+      "font_class": "zhuye",
+      "unicode": "e6ce",
+      "unicode_decimal": 59086
+    },
+    {
+      "icon_id": "1111477",
+      "name": "订单管理",
+      "font_class": "dingdanguanli",
+      "unicode": "e65d",
+      "unicode_decimal": 58973
+    },
+    {
+      "icon_id": "1234246",
+      "name": "验证",
+      "font_class": "yanzheng",
+      "unicode": "e63d",
+      "unicode_decimal": 58941
+    },
+    {
+      "icon_id": "1766249",
+      "name": "人物-@",
+      "font_class": "renyuan",
+      "unicode": "e66d",
+      "unicode_decimal": 58989
+    },
+    {
+      "icon_id": "7391189",
+      "name": "定位",
+      "font_class": "dingwei",
+      "unicode": "e642",
+      "unicode_decimal": 58946
+    },
+    {
+      "icon_id": "13646812",
+      "name": "拼图",
+      "font_class": "pintu",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "18406367",
+      "name": "笔记，记录",
+      "font_class": "bijijilu",
+      "unicode": "e6f3",
+      "unicode_decimal": 59123
+    },
+    {
+      "icon_id": "19135068",
+      "name": "03 DMS_对账管理",
+      "font_class": "03DMS_duizhangguanli",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    }
+  ]
+}
