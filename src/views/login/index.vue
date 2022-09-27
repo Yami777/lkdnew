@@ -119,7 +119,7 @@ export default {
         await this.$refs.loginForm.validate()
         this.loading = true
         await this.$store.dispatch('user/LoginAction', this.loginForm)
-        console.log(this.$store.state.user.token)
+        // console.log(this.$store.state.user.token)
         this.$router.push('/')
       } finally {
         this.loading = false
