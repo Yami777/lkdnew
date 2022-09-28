@@ -1,12 +1,12 @@
 <template>
   <div :class="classObj" class="app-wrapper">
-    <navbar />
+
     <!-- <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" /> -->
     <sidebar class="sidebar-container" />
     <div class="main-container">
-      <!-- <div :class="{'fixed-header':fixedHeader}">
-
-      </div> -->
+      <div :class="{'fixed-header':fixedHeader}">
+        <navbar />
+      </div>
       <app-main />
     </div>
   </div>
@@ -15,6 +15,8 @@
 <script>
 import { Navbar, Sidebar, AppMain } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
+
+// 绘制图表
 
 export default {
   name: 'Layout',
@@ -45,6 +47,9 @@ export default {
   },
   created() {
     // this.$store.dispatch('user/getUserInfo')
+  },
+  mounted() {
+    this.$store.dispatch('user/getUserInfo')
   },
   methods: {
     handleClickOutside() {
@@ -89,12 +94,12 @@ export default {
     transition: width 0.28s;
   }
 
-  .hideSidebar .fixed-header {
-    // width: calc(100% - 54px)
-       width: 100%;
-  }
+  // .hideSidebar .fixed-header {
+  //   // width: calc(100% - 54px)
+  //      width: 100%;
+  // }
 
-  .mobile .fixed-header {
-    width: 100%;
-  }
+  // .mobile .fixed-header {
+  //   width: 100%;
+  // }
 </style>

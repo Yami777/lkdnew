@@ -7,7 +7,8 @@ export default {
   namespaced: true,
   state: {
     token: null,
-    userInfo: {}
+    userInfo: {},
+    userMsg: {}
   },
   mutations: {
     SET_TOKEN(state, token) {
@@ -15,13 +16,23 @@ export default {
     },
     SET_USER_INFO(state, userInfo) {
       state.userInfo = userInfo
+    },
+    SET_USER_MSG(state, userMsg) {
+      state.userMsg = userMsg
+    },
+    REMOVE_TOKEN(state) {
+      state.token = null
+    },
+    REMOVE_USE_MSG(state) {
+      state.userInfo = {}
+      state.userMsg = {}
     }
   },
   actions: {
     async LoginAction({ commit }, loginForm) {
       try {
         const { data } = await login(loginForm)
-        console.log(data)
+        // console.log(data)
         if (!data.success) {
           Message.error(data.msg)
         } else {
@@ -33,10 +44,13 @@ export default {
       }
     },
     async getUserInfo(context) {
-      // console.log(context)
-      // console.log(context.state.userInfo.userId)
-      const data = await getUserInfo(1)
-      console.log(data)
+      const { data } = await getUserInfo(context.state.userInfo.userId)
+      // console.log(data)
+      context.commit('SET_USER_MSG', data)
+    },
+    logout({ commit }) {
+      commit('REMOVE_TOKEN')
+      commit('REMOVE_USE_MSG')
     }
   }
 }

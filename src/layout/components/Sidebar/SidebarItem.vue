@@ -18,7 +18,7 @@
         :is-nest="true"
         :item="child"
         :base-path="resolvePath(child.path)"
-        class="nest-menu"
+        class="child-menu"
       />
     </el-submenu>
   </div>
@@ -93,3 +93,4 @@ export default {
   }
 }
 </script>
+
