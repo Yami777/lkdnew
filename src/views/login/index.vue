@@ -119,7 +119,7 @@ export default {
         await this.$refs.loginForm.validate()
         this.loading = true
         await this.$store.dispatch('user/LoginAction', this.loginForm)
-        console.log(this.$store.state.user.token)
+        // console.log(this.$store.state.user.token)
         this.$router.push('/')
       } finally {
         this.loading = false
@@ -211,6 +211,7 @@ color:#999;
 <style lang="scss" scoped>
 $bg:#2d3a4b;
 $dark_gray:#889aa4;
+// $dark_gray:red;
 $light_gray:#eee;
 
 .login-container {

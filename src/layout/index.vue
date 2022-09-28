@@ -1,11 +1,12 @@
 <template>
   <div :class="classObj" class="app-wrapper">
-    <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
+    <navbar />
+    <!-- <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" /> -->
     <sidebar class="sidebar-container" />
     <div class="main-container">
-      <div :class="{'fixed-header':fixedHeader}">
-        <navbar />
-      </div>
+      <!-- <div :class="{'fixed-header':fixedHeader}">
+
+      </div> -->
       <app-main />
     </div>
   </div>
@@ -35,12 +36,15 @@ export default {
     },
     classObj() {
       return {
-        hideSidebar: !this.sidebar.opened,
-        openSidebar: this.sidebar.opened,
-        withoutAnimation: this.sidebar.withoutAnimation,
-        mobile: this.device === 'mobile'
+        // hideSidebar: !this.sidebar.opened,
+        openSidebar: this.sidebar.opened
+        // withoutAnimation: this.sidebar.withoutAnimation,
+        // mobile: this.device === 'mobile'
       }
     }
+  },
+  created() {
+    // this.$store.dispatch('user/getUserInfo')
   },
   methods: {
     handleClickOutside() {
@@ -60,6 +64,7 @@ export default {
     position: relative;
     height: 100%;
     width: 100%;
+    background-color: #f8fafd;
     &.mobile.openSidebar{
       position: fixed;
       top: 0;
@@ -80,12 +85,14 @@ export default {
     top: 0;
     right: 0;
     z-index: 9;
-    width: calc(100% - #{$sideBarWidth});
+    // width: calc(100% - #{$sideBarWidth});
+    width: 100%;
     transition: width 0.28s;
   }
 
   .hideSidebar .fixed-header {
-    width: calc(100% - 54px)
+    // width: calc(100% - 54px)
+       width: 100%;
   }
 
   .mobile .fixed-header {
