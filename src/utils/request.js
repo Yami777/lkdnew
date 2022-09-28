@@ -7,9 +7,9 @@ const service = axios.create({
 
 // 配置请求拦截器
 service.interceptors.request.use(config => {
-  console.log(config)
+  // console.log(store.getters.token)
   if (store.getters.token) {
-    config.data = `${store.getters.token}`
+    config.headers['Authorization'] = `Bearer ${store.getters.token}`
   }
   return config
 }, error => {

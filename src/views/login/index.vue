@@ -211,6 +211,7 @@ color:#999;
 <style lang="scss" scoped>
 $bg:#2d3a4b;
 $dark_gray:#889aa4;
+// $dark_gray:red;
 $light_gray:#eee;
 
 .login-container {

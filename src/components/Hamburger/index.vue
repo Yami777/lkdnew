@@ -38,7 +38,7 @@ export default {
   height: 20px;
 }
 
-/* .hamburger.is-active {
+.hamburger.is-active {
   transform: rotate(180deg);
-} */
+}
 </style>
