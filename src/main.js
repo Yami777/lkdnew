@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
-
+// import dateTimes from '@/prototypeEx/common'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 // import locale from 'element-ui/lib/locale/lang/en' // lang i18n
@@ -35,7 +35,7 @@ if (process.env.NODE_ENV === 'production') {
 Vue.use(ElementUI)
 
 Vue.config.productionTip = false
-
+// Vue.dateTimes = dateTimes
 new Vue({
   el: '#app',
   router,

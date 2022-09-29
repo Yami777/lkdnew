@@ -7,55 +7,16 @@
             <el-row>
               <!-- 工单统计区域 -->
               <el-col :span="13">
+                <!-- 工单统计区域 -->
                 <div class="grid-content home-user-task-stats">
-                  <!-- 标题区域 -->
-                  <div class="home-title">
-                    <span>工单统计</span>
-                    <span class="home-data-time">2022.09.01~2022.09.28</span>
-                  </div>
-                  <!-- 内容区域 -->
-                  <el-row class="home-user-task-stats-msg">
-                    <el-col :span="6" class="home-task-stats-item">
-                      <span class="task-stats-data">150</span>
-                      <span class="home-task-stats-text">工单总数（个）</span>
-                    </el-col>
-                    <el-col :span="6" class="home-task-stats-item">
-                      <span class="task-stats-data">0</span>
-                      <span class="home-task-stats-text">完成工单（个）</span>
-                    </el-col>
-                    <el-col :span="6" class="home-task-stats-item">
-                      <span class="task-stats-data">0</span>
-                      <span class="home-task-stats-text">进行工单（个）</span>
-                    </el-col>
-                    <el-col :span="6" class="home-task-stats-item">
-                      <span class="task-stats-data">150</span>
-                      <span class="home-task-stats-text">取消工单（个）</span>
-                    </el-col>
-                  </el-row>
+                  <task-states :month="month" />
                 </div>
               </el-col>
-
               <!-- 销售统计区域 -->
-              <el-col :span="11"><div class="grid-content home-sku-sale-stats">
-                <!-- 标题区域 -->
-                <div class="home-title">
-                  <span>   销售统计</span>
-                  <span class="home-data-time">2022.09.01~2022.09.28</span>
+              <el-col :span="11">
+                <div class="grid-content home-sku-sale-stats">
+                  <sale-states :month="month" />
                 </div>
-                <!-- 内容区域 -->
-                <el-row class="home-user-task-stats-msg">
-
-                  <el-col :span="12" class="home-task-stats-item">
-                    <span class="task-stats-data">13504</span>
-                    <span class="home-task-stats-text">订单量（个）</span>
-                  </el-col>
-                  <el-col :span="12" class="home-task-stats-item">
-                    <span class="task-stats-data">8.81</span>
-                    <span class="home-task-stats-text">销售额（万元）</span>
-                  </el-col>
-
-                </el-row>
-              </div>
               </el-col>
             </el-row>
             <el-row>
@@ -64,9 +25,24 @@
                 <div class="grid-content sku-sale-collect">
                   <!-- 标题区域 -->
                   <div class="home-title">
-                    <span>   销售数据</span>
-                    <span class="home-data-time">2022.09.01~2022.09.28</span>
+                    <span>销售数据</span>
+                    <span class="home-data-time">{{ month.start_time }}~{{ month.end_time }}</span>
                   </div>
+                  <!-- 内容区域 -->
+                  <el-row>
+                    <!--销售数据区域 -->
+                    <el-col :span="12">
+                      <div>
+                        <collect-data />
+                      </div>
+                    </el-col>
+                    <!-- 销售额分布区域 -->
+                    <el-col :span="12">
+                      <div>
+                        <collect-sale />
+                      </div>
+                    </el-col>
+                  </el-row>
                 </div>
               </el-col>
             </el-row>
@@ -76,31 +52,23 @@
         <!-- 商品排行榜 -->
         <el-col :span="6">
           <div class="grid-content  sku-sale-rank">
-            <!-- 标题区域 -->
-            <div class="home-title">
-              <span>   商品热榜</span>
-              <span class="home-data-time">2022.09.01~2022.09.28</span>
-            </div>
 
+            <sale-rank :month="month" />
           </div>
         </el-col>
       </el-row>
+      <!-- 合作商和监控区域 -->
       <el-row>
         <!-- 合作商点位数 -->
-        <el-col :span="12"><div class="grid-content partner-node-collect">
-          <!-- 标题区域 -->
-          <div class="home-title">
-            <span>合作商点位数TOP5</span>
+        <el-col :span="12">
+          <div class="grid-content partner-node-collect">
+            <partner-node />
           </div>
-        </div>
         </el-col>
         <!-- 异常设备监控区域 -->
         <el-col :span="12">
           <div class="grid-content abnormal-equipment">
-            <!-- 标题区域 -->
-            <div class="home-title">
-              <span>异常设备监控</span>
-            </div>
+            <abnormal />
 
           </div>
         </el-col>
@@ -110,24 +78,86 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import dayjs from 'dayjs'
 
+import { mapGetters } from 'vuex'
+import { getAllTaskStatusAPI } from '@/api/task'
+import TaskStates from './components/taskStats.vue'
+import SaleStates from './components/saleStates.vue'
+import CollectData from './components/collectData.vue'
+import CollectSale from './components/collectSale.vue'
+import SaleRank from './components/saleRank.vue'
+import PartnerNode from './components/partnerNode.vue'
+import Abnormal from './components/abnormal.vue'
 export default {
   name: 'Dashboard',
+  components: {
+    TaskStates,
+    SaleStates,
+    CollectData,
+    CollectSale,
+    SaleRank,
+    PartnerNode,
+    Abnormal
+  },
+  data() {
+    return {
+      month: {
+        start_time: dayjs().startOf('month').format('YYYY-MM-DD'),
+        end_time: dayjs(new Date()).format('YYYY-MM-DD')
+      }
+    }
+  },
   computed: {
     ...mapGetters([
       'name'
     ])
   },
   mounted() {
-
+    console.log(this.month)
+  },
+  created() {
+    this.getAllTaskStatus()
+  },
+  methods: {
+    async getAllTaskStatus() {
+      await getAllTaskStatusAPI()
+      // console.log(res)
+    }
   }
 }
 </script>
 
+<style>
+  /* 公共标题区域 */
+  .home-title {
+    font-size: 16px;
+    line-height: 1.15;
+    font-weight: 700;
+  }
+  .home-data-time {
+    margin-left: 10px;
+    font-weight: 400;
+    color: #999;
+    font-size: 12px;
+  }
+  .home-user-task-stats-msg{
+    display: flex;
+    align-items: center;
+    height: 108px;}
+  .home-task-stats-item {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;}
+  .task-stats-data {
+    font-size: 36px;
+    font-weight: 700;
+  }
+</style>
 <style lang="scss" scoped>
 .dashboard {
-
+  background-color: #f8fafd;
   &-container {
     margin: 30px;
   }
@@ -157,134 +187,59 @@ export default {
   .grid-content {
     border-radius: 20px;
     // padding: 10px;
-    min-height: 36px;
+    height: 36px;
   }
   .row-bg {
     padding: 10px 0;
     background-color: #f9fafc;
   }
-  // 公共标题区域‘
-  .home-title {
-    font-size: 16px;
-    font-weight: 700;
-  }
-  .home-data-time {
-    margin-left: 10px;
-    font-weight: 400;
-    color: #999;
-    font-size: 12px;
-  }
-        .home-user-task-stats-msg{
 
-        display: flex;
-        align-items: center;
-      min-height: 108px;
-     .home-task-stats-item {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      // text-align: center;
-       height: 100%;
-       .task-stats-data {
-
-        font-size: 36px;
-        font-weight: 700;
-
-       }
-       .home-task-stats-text {
-        margin-top: 10px;
-
-            font-size: 12px;
-       }
-        }
-      }
   // 商品热榜区域
   .sku-sale-rank {
     padding: 10px;
     background-color: pink;
-    min-height: 540px;
+    height: 540px;
   }
   // 左侧区域
   .sku-sale-data {
     // background-color: aquamarine;
-     min-height: 540px;
+     height: 540px;
     //  工单统计区域
      .home-user-task-stats {
       padding: 20px;
-      min-height: 166px;
+      height: 166px;
       margin-right: 20px;
       background: #e9f3ff;
       background-image: url('~@/assets/common/circle.png'), url('~@/assets/common/task.png');
       background-repeat: no-repeat no-repeat ;
       background-position: 0 0,calc(100% - 12px) 100%;
-    //   .home-user-task-stats-msg{
-
-    //     display: flex;
-    //     align-items: center;
-    //   min-height: 108px;
-    //  .home-task-stats-item {
-    //        padding: 20px;
-    //   display: flex;
-    //   flex-direction: column;
-    //   // text-align: center;
-    //    height: 100%;
-    //    .task-stats-data {
-    //     color: #072074;
-    //     font-size: 36px;
-    //     font-weight: 700;
-    //         text-shadow: 2px 4px 7px rgb(85 132 255 / 50%)
-    //    }
-    //    .home-task-stats-text {
-    //     margin-top: 10px;
-    //         color: #91a7dc;
-    //         font-size: 12px;
-    //    }
-    //     }
-    //   }
-       .task-stats-data {
-        color: #072074;
-       }
-      .home-task-stats-text {
-        color: #91a7dc;
-       }
-
      }
     //  销售统计区域
      .home-sku-sale-stats {
       padding: 20px;
-         background:  #fbefe8 url('~@/assets/common/pinkpig.png') no-repeat calc(100% - 12px) 100%;
-         min-height: 166px;
-          .home-task-stats-item {
-       padding-left: 70px;
-          }
-    .task-stats-data {
-      color: #ff5757;
-      text-shadow: 2px 4px 7px rgb(255 99 85 / 50%)
-      }
-        .home-task-stats-text {
-        color: #de9690;
-       }
-
+      background:  #fbefe8 url('~@/assets/common/pinkpig.png') no-repeat calc(100% - 12px) 100%;
+      height: 166px;
      }
     //  销售数据区域
        .sku-sale-collect {
         padding: 20px;
-    background-color: #fff;
-    min-height: 352px;
+       background-color: #fff;
+       height: 352px;
   }
   }
   // 合作商点位区域
   .partner-node-collect {
     padding: 20px;
     margin-right: 10px;
-    min-height: 353px;
+    height: 353px;
     background-color: #fff;
   }
   // 监控区域
 .abnormal-equipment {
-   padding: 20px;
-  margin-left: 10px;
- min-height: 353px;
-    background-color: aquamarine;
+    padding: 20px;
+    margin-left: 10px;
+    height: 353px;
+    background: url('~@/assets/common/empty.png') no-repeat center;
+    background-color: #fff;
 }
 </style>

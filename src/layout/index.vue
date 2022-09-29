@@ -39,9 +39,9 @@ export default {
     classObj() {
       return {
         // hideSidebar: !this.sidebar.opened,
-        openSidebar: this.sidebar.opened
-        // withoutAnimation: this.sidebar.withoutAnimation,
-        // mobile: this.device === 'mobile'
+        openSidebar: this.sidebar.opened,
+        withoutAnimation: this.sidebar.withoutAnimation,
+        mobile: this.device === 'mobile'
       }
     }
   },
@@ -99,7 +99,7 @@ export default {
   //      width: 100%;
   // }
 
-  // .mobile .fixed-header {
-  //   width: 100%;
-  // }
+  .mobile .fixed-header {
+    width: 100%;
+  }
 </style>
