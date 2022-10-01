@@ -8,9 +8,9 @@ import nodeRouter from './modules/node'
 import orderRouter from './modules/order'
 import policyRouter from './modules/policy'
 import userRouter from './modules/user'
-// import socialRouter from './modules/social'
+import reportRouter from './modules/report'
 
-const asyncRoutes = [taskRouter, nodeRouter, equipmentRouter, userRouter, goodsRouter, policyRouter, orderRouter]
+const asyncRoutes = [taskRouter, nodeRouter, equipmentRouter, userRouter, goodsRouter, policyRouter, orderRouter, reportRouter]
 
 Vue.use(Router)
 

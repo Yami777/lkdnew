@@ -25,8 +25,15 @@
                 <div class="grid-content sku-sale-collect">
                   <!-- 标题区域 -->
                   <div class="home-title">
-                    <span>销售数据</span>
-                    <span class="home-data-time">{{ month.start_time }}~{{ month.end_time }}</span>
+                    <div>
+                      <span>销售数据</span>
+                      <span class="home-data-time">{{ month.start_time }}~{{ month.end_time }}</span>
+                    </div>
+                    <div class="week-month-year">
+                      <div class="week-month-year-item isChecked" @click="showWeekData">周</div>
+                      <div class="week-month-year-item" @click="showMonthData">月</div>
+                      <div class="week-month-year-item" @click="showYearData">年</div>
+                    </div>
                   </div>
                   <!-- 内容区域 -->
                   <el-row>
@@ -225,6 +232,42 @@ export default {
         padding: 20px;
        background-color: #fff;
        height: 352px;
+       .home-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 34px;
+        .week-month-year {
+          display: flex;
+          text-align: center;
+          font-weight: 600;
+          color: #333;
+          display: -webkit-box;
+        -webkit-box-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        align-items: center;
+        width: 129px;
+        height: 34px;
+        background: rgba(233,243,255,.37);
+        border-radius: 10px;
+    .week-month-year-item {
+        width: 37px;
+        height: 25px;
+        font-size: 14px;
+        line-height: 25px;
+        cursor: pointer;
+    }
+    .isChecked {
+      background: #fff;
+      box-shadow: 0 0 4px 0 rgb(0 0 0 / 11%);
+      border-radius: 7px;
+      text-align: center;
+      font-weight: 600;
+      color: #333;
+    }
+        }
+       }
   }
   }
   // 合作商点位区域
