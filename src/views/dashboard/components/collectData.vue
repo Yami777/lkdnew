@@ -5,6 +5,7 @@
 <script>
 import * as echarts from 'echarts'
 export default {
+
   mounted() {
     var myChart = echarts.init(document.querySelector('.sku-sale-collect-data'))
     const option = {
@@ -92,5 +93,6 @@ export default {
       margin-top: 10px;
       height: 278px;
       // background-color: pink;
+
     }
 </style>

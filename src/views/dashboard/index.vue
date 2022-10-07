@@ -15,7 +15,9 @@
               <!-- 销售统计区域 -->
               <el-col :span="11">
                 <div class="grid-content home-sku-sale-stats">
-                  <sale-states :month="month" />
+                  <sale-states
+                    :month="month"
+                  />
                 </div>
               </el-col>
             </el-row>
@@ -86,7 +88,6 @@
 
 <script>
 import dayjs from 'dayjs'
-
 import { mapGetters } from 'vuex'
 import { getAllTaskStatusAPI } from '@/api/task'
 import TaskStates from './components/taskStats.vue'
@@ -96,6 +97,7 @@ import CollectSale from './components/collectSale.vue'
 import SaleRank from './components/saleRank.vue'
 import PartnerNode from './components/partnerNode.vue'
 import Abnormal from './components/abnormal.vue'
+import { getSeriesSaleDataAPI } from '@/api/report'
 export default {
   name: 'Dashboard',
   components: {
@@ -110,9 +112,21 @@ export default {
   data() {
     return {
       month: {
-        start_time: dayjs().startOf('month').format('YYYY-MM-DD'),
-        end_time: dayjs(new Date()).format('YYYY-MM-DD')
+        start_time: dayjs().startOf('month').format('YYYY-MM-DD').replace(/-/ig, '.'),
+        end_time: dayjs(new Date()).format('YYYY-MM-DD').replace(/-/ig, '.')
+      },
+      partner: {
+        partnerId: '',
+        start: `${dayjs().startOf('month').format('YYYY-MM-DD')} 00:00:00`,
+        end: `${dayjs(new Date()).format('YYYY-MM-DD')} 23:59:59`,
+        innerCode: ''
+      },
+      series: {
+        collectType: 1, // 1、按日，2、按月
+        start: dayjs().startOf('month').format('YYYY-MM-DD'),
+        end: dayjs(new Date()).format('YYYY-MM-DD')
       }
+
     }
   },
   computed: {
@@ -121,16 +135,24 @@ export default {
     ])
   },
   mounted() {
-    console.log(this.month)
+    // console.log(this.month)
   },
   created() {
-    this.getAllTaskStatus()
+    this.showWeekData()
   },
   methods: {
     async getAllTaskStatus() {
       await getAllTaskStatusAPI()
+      this.getPartnerORder()
       // console.log(res)
-    }
+    },
+    async showWeekData() {
+      const res = await getSeriesSaleDataAPI(this.series.collectType, this.series.start, this.series.end)
+      console.log(res)
+    },
+    showMonthData() {},
+    showYearData() {}
+
   }
 }
 </script>
@@ -232,6 +254,7 @@ export default {
         padding: 20px;
        background-color: #fff;
        height: 352px;
+
        .home-title {
         display: flex;
         justify-content: space-between;
@@ -284,5 +307,20 @@ export default {
     height: 353px;
     background: url('~@/assets/common/empty.png') no-repeat center;
     background-color: #fff;
+}
+
+      ::v-deep .el-table::before{
+ background-color: transparent;
+}
+::v-deep .el-table td{
+border-bottom: none;
+height: 44px !important;
+padding: 0px !important;
+}
+::v-deep .el-table tbody tr:hover>td { border-radius: 5px;}
+::v-deep .el-table th.is-leaf {
+ border-bottom: none;
+height: 44px;
+
 }
 </style>

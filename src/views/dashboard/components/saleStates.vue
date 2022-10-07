@@ -9,11 +9,11 @@
     <el-row class="home-user-task-stats-msg">
 
       <el-col :span="12" class="home-task-stats-item">
-        <span class="task-stats-data">13504</span>
+        <span class="task-stats-data">{{ orderCount }}</span>
         <span class="home-task-stats-text">订单量（个）</span>
       </el-col>
       <el-col :span="12" class="home-task-stats-item">
-        <span class="task-stats-data">8.81</span>
+        <span class="task-stats-data">{{ monthSales }}</span>
         <span class="home-task-stats-text">销售额（万元）</span>
       </el-col>
 
@@ -22,11 +22,51 @@
 </template>
 
 <script>
+import dayjs from 'dayjs'
+import { getMonthSalesAPI, getPartnerORderAPI } from '@/api/report'
 export default {
   props: {
     month: {
       type: Object,
       default: () => ({})
+    }
+  },
+  data() {
+    return {
+      partner: {
+        partnerId: '',
+        start: `${dayjs().startOf('month').format('YYYY-MM-DD')} 00:00:00`,
+        end: `${dayjs(new Date()).format('YYYY-MM-DD')} 23:59:59`,
+        innerCode: ''
+      },
+      monthSales: 0,
+      orderCount: 0
+    }
+  },
+  created() {
+    this.getMonthSales()
+    this.getPartnerORder()
+  },
+  methods: {
+    // 获取每个月的销售额
+    async  getMonthSales() {
+      try {
+        const { data } = await getMonthSalesAPI(this.partner)
+        // console.log(data)
+        this.monthSales = data === 0 ? 0 : (data / 1000000).toFixed(2)
+      } catch (e) {
+        throw new Error()
+      }
+    },
+    // 获取每个月的订单量
+    async getPartnerORder() {
+      try {
+        const { data } = await getPartnerORderAPI(this.partner)
+        // console.log(data)
+        this.orderCount = data
+      } catch (e) {
+        throw new Error()
+      }
     }
   }
 }
