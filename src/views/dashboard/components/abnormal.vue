@@ -1,8 +1,10 @@
 <template>
-  <div>
+  <div class="ab">
     <!-- 标题区域 -->
     <div class="home-title">
+
       <span>异常设备监控</span>
+      <i class="el-icon-chat-dot-round" />
     </div>
     <!-- 内容区域 -->
   </div>
@@ -14,6 +16,15 @@ export default {
 }
 </script>
 
-<style>
+<style  lang="scss">
+.ab {
+.home-title {
+  display: flex;
+  justify-content: space-between;
+     .el-icon-chat-dot-round {
+      color: #5f84ff;
+    }
+}
+}
 
 </style>

@@ -3,6 +3,7 @@
     <!-- 标题区域 -->
     <div class="home-title">
       <span>合作商点位数TOP5</span>
+      <i class="el-icon-chat-dot-round" />
     </div>
     <el-row class="partner-node-content">
       <el-col :span="17"><div class="partner-node-content-bar" /></el-col>
@@ -50,6 +51,13 @@ export default {
 <style lang="scss">
 .partner-node {
   height: 353px;
+  .home-title {
+    display: flex;
+    justify-content: space-between;
+    .el-icon-chat-dot-round {
+      color: #5f84ff;
+    }
+  }
 }
 .partner-node-content {
   display: flex;

@@ -32,9 +32,9 @@
                       <span class="home-data-time">{{ month.start_time }}~{{ month.end_time }}</span>
                     </div>
                     <div class="week-month-year">
-                      <div class="week-month-year-item isChecked" @click="showWeekData">周</div>
-                      <div class="week-month-year-item" @click="showMonthData">月</div>
-                      <div class="week-month-year-item" @click="showYearData">年</div>
+                      <div :class="['week-month-year-item',{isChecked:active===0}]" @click="showWeek">周</div>
+                      <div :class="['week-month-year-item',{isChecked:active===1}]" @click="showMonth">月</div>
+                      <div :class="['week-month-year-item',{isChecked:active===2}]" @click="showYear">年</div>
                     </div>
                   </div>
                   <!-- 内容区域 -->
@@ -42,13 +42,13 @@
                     <!--销售数据区域 -->
                     <el-col :span="12">
                       <div>
-                        <collect-data />
+                        <collect-data v-if="xAxisData.length!==0" :x-axis-data="xAxisData" :series-data="seriesData" />
                       </div>
                     </el-col>
                     <!-- 销售额分布区域 -->
                     <el-col :span="12">
                       <div>
-                        <collect-sale />
+                        <collect-sale v-if="partnerSeries.length!==0" :partner-x-axis="partnerXAxis" :partner-series="partnerSeries" />
                       </div>
                     </el-col>
                   </el-row>
@@ -89,7 +89,6 @@
 <script>
 import dayjs from 'dayjs'
 import { mapGetters } from 'vuex'
-import { getAllTaskStatusAPI } from '@/api/task'
 import TaskStates from './components/taskStats.vue'
 import SaleStates from './components/saleStates.vue'
 import CollectData from './components/collectData.vue'
@@ -97,7 +96,7 @@ import CollectSale from './components/collectSale.vue'
 import SaleRank from './components/saleRank.vue'
 import PartnerNode from './components/partnerNode.vue'
 import Abnormal from './components/abnormal.vue'
-import { getSeriesSaleDataAPI } from '@/api/report'
+import { getSeriesSaleDataAPI, getAreaPartnerSalesAPI } from '@/api/report'
 export default {
   name: 'Dashboard',
   components: {
@@ -121,12 +120,22 @@ export default {
         end: `${dayjs(new Date()).format('YYYY-MM-DD')} 23:59:59`,
         innerCode: ''
       },
-      series: {
+      daySeries: {
         collectType: 1, // 1、按日，2、按月
         start: dayjs().startOf('month').format('YYYY-MM-DD'),
         end: dayjs(new Date()).format('YYYY-MM-DD')
-      }
-
+      },
+      xAxisData: [],
+      seriesData: [],
+      xAxis: [],
+      newArr: [],
+      areaPatSales: {
+        start_day: '',
+        end_day: ''
+      },
+      partnerSeries: [],
+      partnerXAxis: [],
+      active: 0
     }
   },
   computed: {
@@ -138,20 +147,117 @@ export default {
     // console.log(this.month)
   },
   created() {
-    this.showWeekData()
+    this.showWeek()
   },
   methods: {
-    async getAllTaskStatus() {
-      await getAllTaskStatusAPI()
-      this.getPartnerORder()
-      // console.log(res)
+    showWeek() {
+      this.active = 0
+      this.showWeekData()
+      this.showWeekPartner()
     },
+    showMonth() {
+      this.active = 1
+      this.showMonthData()
+      this.showMonthPartner()
+    },
+    showYear() {
+      this.active = 2
+      this.showYearData()
+      this.showYearPartner()
+    },
+
     async showWeekData() {
-      const res = await getSeriesSaleDataAPI(this.series.collectType, this.series.start, this.series.end)
-      console.log(res)
+      this.xAxisData = []
+      this.seriesData = []
+      this.isChecked = true
+      try {
+        const { data } = await getSeriesSaleDataAPI(this.daySeries.collectType, this.daySeries.start, this.daySeries.end)
+        // console.log(data)
+        // data.xAxis.forEach(ele => this.xAxis.push(ele))
+        // console.log(this.xAxis)
+
+        const week = ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+        const num = ((new Date()).getDay() || 7) - 1
+        this.xAxisData = week.filter((item, index) => {
+          return index <= num
+        })
+
+        const res = data.series
+        this.seriesData = res.reverse().filter((item, index) => index <= num).reverse()
+      // console.log(this.seriesData)
+      } catch {
+        throw new Error()
+      }
     },
-    showMonthData() {},
-    showYearData() {}
+    async   showMonthData() {
+      this.xAxisData = []
+      this.seriesData = []
+      try {
+        const { data } = await getSeriesSaleDataAPI(this.daySeries.collectType, this.daySeries.start, this.daySeries.end)
+        // console.log(data)
+        const arr = JSON.parse(JSON.stringify(data.xAxis))
+        const newr = []
+        // console.log(this.xAxis[0].dayjs.format('MM-DD'))
+        arr.forEach(ele => newr.push(ele))
+        this.xAxisData = newr.map(item => {
+          return item.slice(5).replace(/(\d{2})\-(\d{2})/, `$1月$2日`).replace(/\b(0)/, '')
+        })
+        // console.log(this.xAxisData)
+        this.seriesData = data.series
+      } catch {
+        throw new Error()
+      }
+    },
+    async  showYearData() {
+      this.daySeries.collectType = 2
+      this.xAxisData = []
+      this.seriesData = []
+      const { data } = await getSeriesSaleDataAPI(this.daySeries.collectType, `${(new Date()).getFullYear()}-01-01`, this.daySeries.end)
+      const res = JSON.parse(JSON.stringify(data.xAxis))
+      this.xAxisData = res.map(month => month.replace(/(\d{4})\-(\d{2})/, `$1年$2月`))
+      this.seriesData = data.series
+    },
+    async showWeekPartner() {
+      this.partnerSeries = []
+      this.partnerXAxis = []
+      const date = new Date()
+      date.setDate(date.getDate() - date.getDay() + 1)
+      this.areaPatSales.start_day = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+      date.setDate(date.getDate() + 6)
+      this.areaPatSales.end_day = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+      try {
+        const { data } = await getAreaPartnerSalesAPI(dayjs(this.areaPatSales.start_day).format('YYYY-MM-DD'), dayjs(this.areaPatSales.end_day).format('YYYY-MM-DD'))
+        // console.log(data)
+        this.partnerXAxis = data.xAxis
+        this.partnerSeries = data.series
+      } catch {
+        throw new Error()
+      }
+    },
+    async showMonthPartner() {
+      this.partnerSeries = []
+      this.partnerXAxis = []
+      try {
+        const { data } = await getAreaPartnerSalesAPI(dayjs().startOf('month').format('YYYY-MM-DD'), dayjs(new Date()).format('YYYY-MM-DD'))
+        // console.log(data)
+        this.partnerXAxis = data.xAxis
+        this.partnerSeries = data.series
+      } catch {
+        throw new Error()
+      }
+    },
+    async showYearPartner() {
+      this.partnerSeries = []
+      this.partnerXAxis = []
+      try {
+        const { data } = await getAreaPartnerSalesAPI(`${(new Date()).getFullYear()}-01-01`, dayjs(new Date()).format('YYYY-MM-DD'))
+        // console.log(data)
+        this.partnerXAxis = data.xAxis
+        this.partnerSeries = data.series
+      } catch {
+        throw new Error()
+      }
+    }
 
   }
 }
@@ -160,8 +266,9 @@ export default {
 <style>
   /* 公共标题区域 */
   .home-title {
+    display: flex;
     font-size: 16px;
-    line-height: 1.15;
+    align-items: center;
     font-weight: 700;
   }
   .home-data-time {

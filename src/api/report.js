@@ -35,3 +35,15 @@ export const getSeriesSaleDataAPI = (collectType, start, end) => {
   })
 }
 
+/**
+ * 根据地区获取销售额最高的区域
+ * @param {String} start 开始日期 2020-01-01
+ * @param {String} end 结束日期 2020-01-01
+ * @returns
+ */
+export const getAreaPartnerSalesAPI = (start, end) => {
+  return request({
+    url: `order-service/report/regionCollect/${start}/${end}`
+
+  })
+}
