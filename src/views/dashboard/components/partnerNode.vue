@@ -3,14 +3,14 @@
     <!-- 标题区域 -->
     <div class="home-title">
       <span>合作商点位数TOP5</span>
-      <i class="el-icon-chat-dot-round" />
+      <i class="el-icon-chat-dot-round" @click="$router.push('node/partner')" />
     </div>
     <el-row class="partner-node-content">
       <el-col :span="17"><div class="partner-node-content-bar" /></el-col>
       <el-col :span="7"><div class="partner-node-content-text">
-        <div class="count">16</div>
+        <div class="count">{{ nodeCount }}</div>
         <div class="name">点位数</div>
-        <div class="count count2">5</div>
+        <div class="count count2">{{ partnerCount }}</div>
         <div class="name">合作商数</div>
       </div></el-col>
     </el-row>
@@ -19,9 +19,22 @@
 
 <script>
 import * as echarts from 'echarts'
+import { getNodeCountAPI, getPartnerCountAPI, getNodeCollectAPI } from '@/api/node'
 export default {
+  data() {
+    return {
+      nodeCount: 0,
+      partnerCount: 0,
+      nodeCollect: []
+    }
+  },
+  created() {
+    this.getNodeCount()
+    this.getPartnerCount()
+    this.getNodeCollect()
+  },
   mounted() {
-    this.getAreaPartner()
+
   },
   methods: {
     getAreaPartner() {
@@ -31,23 +44,50 @@ export default {
           {
             name: 'Nightingale Chart',
             type: 'pie',
-            radius: [30, 80],
+            radius: [10, 70],
             center: ['40%', '50%'],
             roseType: 'area',
             itemStyle: {
               borderRadius: 8
             },
-            data: [
-              { value: 32, name: '佳佳' },
-              { value: 40, name: '金燕龙合作商' },
-              { value: 30, name: 'likede4' },
-              { value: 18, name: '北京合作商' },
-              { value: 18, name: '天华物业' }
-            ]
+            label: {
+              formatter(ar) {
+                return ar.name + ar.percent + '%'
+              }
+            },
+            data: this.nodeCollect
           }
         ]
       }
       myChart.setOption(option)
+    },
+    async getNodeCount() {
+      try {
+        const { data } = await getNodeCountAPI()
+        // console.log(data)
+        this.nodeCount = data
+      } catch {
+        throw new Error()
+      }
+    },
+    async getPartnerCount() {
+      try {
+        const { data } = await getPartnerCountAPI()
+        // console.log(data)
+        this.partnerCount = data
+      } catch {
+        throw new Error()
+      }
+    },
+    async getNodeCollect() {
+      try {
+        const { data } = await getNodeCollectAPI()
+        // console.log(data)
+        this.nodeCollect = data
+        this.getAreaPartner()
+      } catch {
+        throw new Error()
+      }
     }
   }
 }
@@ -63,6 +103,7 @@ export default {
       color: #5f84ff;
     }
   }
+
 }
 .partner-node-content {
   display: flex;
@@ -105,5 +146,19 @@ export default {
     }
 }
   }
+         ::v-deep .el-table::before{
+ background-color: transparent;
+}
+::v-deep .el-table td{
+border-bottom: none;
+height: 44px !important;
+padding: 0px !important;
+}
+::v-deep .el-table tbody tr:hover>td { border-radius: 5px;}
+::v-deep .el-table th.is-leaf {
+ border-bottom: none;
+height: 44px;
+
+}
 
 </style>

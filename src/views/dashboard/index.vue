@@ -333,7 +333,7 @@ export default {
   // 商品热榜区域
   .sku-sale-rank {
     padding: 10px;
-    background-color: pink;
+    background-color: #fff;
     height: 540px;
   }
   // 左侧区域
