@@ -9,7 +9,7 @@ export default {
   },
   children: [
     {
-      path: '/business',
+      path: '/task/business',
       name: 'business',
       component: () => import('@/views/task/components/business.vue'),
       meta: {

@@ -11,7 +11,7 @@ export const getAllTaskStatusAPI = () => {
 
 /**
  * 工单搜索
- * @param {Object} params
+ * @param {Object} params status: start:每年开始日期2022-01-01，每年结束日期：2022-12-31 isRepair：false pageIndex，pageSize
  * @returns
  */
 export const getSearchTaskAPI = (params) => {
