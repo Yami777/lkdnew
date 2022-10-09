@@ -221,12 +221,12 @@ export default {
       this.partnerSeries = []
       this.partnerXAxis = []
       const date = new Date()
-      date.setDate(date.getDate() - date.getDay() + 1)
-      this.areaPatSales.start_day = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
-      date.setDate(date.getDate() + 6)
-      this.areaPatSales.end_day = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+      const day = date.getDay() || 7
+      // console.log(dayjs(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1 - day)).format('YYYY-MM-DD'))
+      this.areaPatSales.start_day = dayjs(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1 - day)).format('YYYY-MM-DD')
+      // console.log(this.areaPatSales.start_day)
       try {
-        const { data } = await getAreaPartnerSalesAPI(dayjs(this.areaPatSales.start_day).format('YYYY-MM-DD'), dayjs(this.areaPatSales.end_day).format('YYYY-MM-DD'))
+        const { data } = await getAreaPartnerSalesAPI(this.areaPatSales.start_day, dayjs(new Date()).format('YYYY-MM-DD'))
         // console.log(data)
         this.partnerXAxis = data.xAxis
         this.partnerSeries = data.series

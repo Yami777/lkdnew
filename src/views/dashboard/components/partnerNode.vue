@@ -21,29 +21,34 @@
 import * as echarts from 'echarts'
 export default {
   mounted() {
-    var myChart = echarts.init(document.querySelector('.partner-node-content-bar'))
-    const option = {
-      series: [
-        {
-          name: 'Nightingale Chart',
-          type: 'pie',
-          radius: [30, 80],
-          center: ['40%', '50%'],
-          roseType: 'area',
-          itemStyle: {
-            borderRadius: 8
-          },
-          data: [
-            { value: 32, name: '佳佳' },
-            { value: 40, name: '金燕龙合作商' },
-            { value: 30, name: 'likede4' },
-            { value: 18, name: '北京合作商' },
-            { value: 18, name: '天华物业' }
-          ]
-        }
-      ]
+    this.getAreaPartner()
+  },
+  methods: {
+    getAreaPartner() {
+      var myChart = echarts.init(document.querySelector('.partner-node-content-bar'))
+      const option = {
+        series: [
+          {
+            name: 'Nightingale Chart',
+            type: 'pie',
+            radius: [30, 80],
+            center: ['40%', '50%'],
+            roseType: 'area',
+            itemStyle: {
+              borderRadius: 8
+            },
+            data: [
+              { value: 32, name: '佳佳' },
+              { value: 40, name: '金燕龙合作商' },
+              { value: 30, name: 'likede4' },
+              { value: 18, name: '北京合作商' },
+              { value: 18, name: '天华物业' }
+            ]
+          }
+        ]
+      }
+      myChart.setOption(option)
     }
-    myChart.setOption(option)
   }
 }
 </script>
