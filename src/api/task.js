@@ -32,3 +32,26 @@ export const getTaskStatusAPI = (start, end) => {
     url: `/task-service/task/taskReportInfo/${start}/${end}`
   })
 }
+
+/**
+ * 获取补货预警值（运营工单里面的工单配置）
+ * @returns
+ */
+export const getSupplyAlertValueAPI = () => {
+  return request({
+    url: 'task-service/task/supplyAlertValue'
+  })
+}
+
+/**
+ * 设置自动补货预警值
+ * @param {Number} data 50代表满量的50%为补货预警值
+ * @returns
+ */
+export const postAutoSupplyConfigAPI = (data) => {
+  return request({
+    url: 'task-service/task/autoSupplyConfig',
+    method: 'POST',
+    data
+  })
+}

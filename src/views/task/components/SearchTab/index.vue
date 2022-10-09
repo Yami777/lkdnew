@@ -4,7 +4,12 @@
       <el-input v-model="formData.taskCode" placeholder="请选择" clearable />
     </el-form-item>
     <el-form-item :label="title2" class="task-status">
-      <el-select v-model="formData.statusName" placeholder="请选择" clearable @focus="getAllTaskStatus">
+      <el-select
+        v-model="formData.statusName"
+        placeholder="请选择"
+        clearable
+        @focus="getAllTaskStatus"
+      >
         <el-option
           v-for="status in statusList"
           :key="status.statusId"
