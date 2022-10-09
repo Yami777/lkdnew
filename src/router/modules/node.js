@@ -27,7 +27,7 @@ export default {
       }
     },
     {
-      path: '/partner',
+      path: 'partner',
       name: 'partner',
       component: () => import('@/views/node/components/partner.vue'),
       meta: {

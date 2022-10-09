@@ -28,6 +28,7 @@
 
     .scrollbar-wrapper {
       overflow-x: hidden !important;
+      width: 167px;
     }
 
     .el-scrollbar__bar.is-vertical {
@@ -87,6 +88,16 @@
     & .el-submenu .el-menu-item {
       min-width: $sideBarWidth !important;
       background-color: $subMenuBg !important;
+
+      &:hover {
+        background-color: $subMenuHover !important;
+      }
+    }
+    & .child-menu .el-submenu>.el-submenu__title,
+    & .el-submenu .el-menu-item {
+      min-width: $sideBarWidth !important;
+      background-color: $subMenuBg !important;
+      color:#999 !important;
 
       &:hover {
         background-color: $subMenuHover !important;

@@ -10,15 +10,12 @@
       <el-dropdown class="avatar-container">
         <div class="avatar-wrapper">
           <img src="@/assets/common/logo.png" class="user-avatar">
-          <span>欢迎您，用户名</span>
-
+          <span>欢迎您，{{ $store.state.user.userMsg.userName }}</span>
         </div>
-
       </el-dropdown>
       <!-- 退出按钮区域 -->
-      <el-tooltip content="退出" placement="top">
-        <span>退出 <i class="el-icon-caret-bottom" /></span>
-
+      <el-tooltip content="退出登录" placement="top">
+        <span @click="logout">退出 <i class="el-icon-caret-bottom" /></span>
       </el-tooltip>
 
     </div>
@@ -26,7 +23,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+
 // import Hamburger from '@/components/Hamburger'
 
 export default {
@@ -34,10 +31,7 @@ export default {
     // Hamburger
   },
   computed: {
-    ...mapGetters([
-      'sidebar',
-      'avatar'
-    ])
+
   },
   methods: {
     toggleSideBar() {
@@ -45,7 +39,7 @@ export default {
     },
     async logout() {
       await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      this.$router.push(`/login`)
     }
   }
 }
@@ -66,6 +60,7 @@ export default {
   background-size: contain;
   color:#fff;
   z-index: 102;
+  padding-right:30px ;
   .logo-container {
     margin-left: 20px;
     width: 84px;

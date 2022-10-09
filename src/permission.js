@@ -2,7 +2,7 @@ import router from '@/router'
 import store from '@/store'
 // console.log(store)
 const whiteList = ['/login', '/404']
-router.beforeEach((to, from, next) => {
+router.beforeEach(async(to, from, next) => {
   // console.log(to)
   // console.log(from)
   // next(false)
